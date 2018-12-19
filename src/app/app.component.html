@@ -1,21 +1,70 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
-
-<router-outlet></router-outlet>
+<div class="container">
+  <div class="row p-2">
+    <div class="col-sm-4">
+      <button class="btn btn-primary" (click)="startEdit()">
+          <i class="fas fa-edit" ></i></button>
+    </div>
+    <div class="col-sm-8">
+        <button *ngIf ="isHidden" type="button" class="btn btn-danger ml-2 right" (click)="saveEdit()">Cancel</button>
+        <button *ngIf ="isHidden" type="button" class="btn btn-success right" (click)="cancelEdit()">Save</button>
+    </div>
+  </div>
+  <nz-table
+      #editRowTable
+      [nzData]="dataSet">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Address</th>
+          <!-- <th>Action</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of editRowTable.data">
+          <td>
+            <div class="editable-cell">
+              <div class="editable-cell-text-wrapper">
+                <ng-container *ngIf="!editCache[data.key].edit">
+                  {{data.name}}
+                </ng-container>
+                <ng-container *ngIf="editCache[data.key].edit">
+                  <input type="text" nz-input [(ngModel)]="editCache[data.key].data.name">
+                </ng-container>
+              </div>
+            </div>
+          </td>
+          <td>
+            <ng-container *ngIf="!editCache[data.key].edit">
+              {{data.age}}
+            </ng-container>
+            <ng-container *ngIf="editCache[data.key].edit">
+              <input type="text" nz-input [(ngModel)]="editCache[data.key].data.age">
+            </ng-container>
+          </td>
+          <td>
+            <ng-container *ngIf="!editCache[data.key].edit">
+              {{data.address}}
+            </ng-container>
+            <ng-container *ngIf="editCache[data.key].edit">
+              <input type="text" nz-input [(ngModel)]="editCache[data.key].data.address">
+            </ng-container>
+          </td>
+          <td>
+            <!-- <div class="editable-row-operations">
+              <ng-container *ngIf="!editCache[data.key].edit">
+                <a (click)="startEdit()">Edit</a>
+              </ng-container>
+              <ng-container *ngIf="editCache[data.key].edit">
+                <a (click)="saveEdit(data.key)">Save</a>
+                <nz-popconfirm [nzTitle]="'Sure to cancel?'" (nzOnConfirm)="cancelEdit(data.key)">
+                  <a nz-popconfirm>Cancel</a>
+                </nz-popconfirm>
+              </ng-container>
+            </div> -->
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
